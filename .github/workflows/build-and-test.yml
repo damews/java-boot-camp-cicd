@@ -6,6 +6,11 @@ on:
     branches: [ master ]
   pull_request:
     branches: [ master ]
+    types:
+      - opened
+      - edited
+      - synchronize
+      - reopened
     
   workflow_dispatch:
 
@@ -33,15 +38,3 @@ jobs:
         run: mvn -version
       - name: Run Maven Build and tests
         run: mvn package
-        
-  secret_test:
-    name: Secret Test
-    runs-on: ubuntu-latest
-    
-    steps:
-      - shell: bash
-        env:
-          SUPER_SECRET: ${{ secrets.TEST_SECRET }}
-        run: |
-          echo "$SUPER_SECRET"
-
