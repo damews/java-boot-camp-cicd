@@ -50,5 +50,5 @@ jobs:
       - name: Check Gradle version
         run: mvn -version
       - name: Run Maven Build and tests
-        run: mvn install
+        run: mvn package
 
