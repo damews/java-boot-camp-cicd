@@ -1,0 +1,23 @@
+name: Deploy
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  setup:
+    name: Setup Java and Verify Dependencies
+    uses: damews/java-boot-camp-cicd/.github/workflows/setup.yml@master
+  build:
+    name: Build and Test
+    uses: damews/java-boot-camp-cicd/.github/workflows/build-and-test.yml@master
+  deploy: 
+    needs: build
+    runs-on: ubuntu-latest
+    name: deploy
+    steps:
+      - uses: actions/checkout@v2
+      - name: Publish to GitHub Packages Apache Maven
+        run: mvn deploy -s $GITHUB_WORKSPACE/settings.xml
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
