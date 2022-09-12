@@ -36,4 +36,5 @@ jobs:
         with:
           body: 'My Release'
           artifacts: "staging/**"
+          allowUpdates: true
       
