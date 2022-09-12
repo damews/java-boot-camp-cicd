@@ -24,7 +24,7 @@ jobs:
           java-version: '11'
           cache: maven
       - run: mvn --batch-mode --update-snapshots package
-      - run: mkdir staging && cp target/*.jar staging
+      - run: mkdir staging && cp lambdas/target/*.jar staging
       - uses: actions/upload-artifact@v3
         with:
           name: Package
