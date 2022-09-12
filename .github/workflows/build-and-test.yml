@@ -19,11 +19,21 @@ jobs:
   setup:
     uses: damews/java-boot-camp-cicd/.github/workflows/setup.yml@master
 
-  test_and_build:
-    needs: setup
-    name: Install
+  linter:
+    name: linter
     runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Run Linter
+        uses: github/super-linter@v4
+        env:
+          VALIDATE_ALL_CODEBASE: false
+          DEFAULT_BRANCH: master
 
+  test:
+    needs: setup
+    name: Test
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - name: Set up JDK 11
@@ -32,9 +42,14 @@ jobs:
           distribution: 'zulu'
           java-version: '11'
           cache: maven
-      - name: Check Java version
-        run: java -version
-      - name: Check Gradle version
-        run: mvn -version
       - name: Run Maven Build and tests
-        run: mvn package
+        run: mvn test
+      
+  build:
+    needs: [ linter, test ]
+    runs-on: ubuntu-latest
+    name: build
+    steps:
+      - uses: actions/checkout@v2
+      - name: Run Maven Build and tests
+        run: mvn install -DskipTests=true
