@@ -23,10 +23,7 @@ jobs:
           distribution: 'zulu'
           java-version: '11'
           cache: maven
-      - name: Maven deploy
-        run: mvn deploy -s $GITHUB_WORKSPACE/settings.xml
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
+      - run: mvn --batch-mode --update-snapshots package
       - run: mkdir staging && cp target/*.jar staging
       - uses: actions/upload-artifact@v3
         with:
